@@ -2,6 +2,7 @@ package com.wc.predictor.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wc.predictor.entity.GameData;
 import com.wc.predictor.entity.PlayerRank;
 import com.wc.predictor.entity.Ranks;
 import com.wc.predictor.service.ScheduleServiceImpl;
@@ -38,9 +40,10 @@ public class PredictController {
 	}
 	
 	@RequestMapping("/schedule")
-	public ResponseEntity<String> getSchedule(){
+	public ResponseEntity<List<GameData>> getSchedule(){
+		List<GameData> gameList = null;
 		try {
-			scheduleServiceImpl.getSchedule("/static/iccwc2019schedule.xlsx");
+			gameList = scheduleServiceImpl.getSchedule("/static/iccwc2019schedule.xlsx");
 		} catch (EncryptedDocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,7 +54,7 @@ public class PredictController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ResponseEntity<String> re = new ResponseEntity<String>("Good", HttpStatus.OK);
+		ResponseEntity<List<GameData>> re = new ResponseEntity<List<GameData>>(gameList, HttpStatus.OK);
 		return re;
 	}
 	
